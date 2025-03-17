@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizare Comandă - DLE Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"> 
+  <style>
+    /* Stiluri pentru antetul cu gradient */
+    .site-header {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      background: linear-gradient(45deg, #000000, #ffffff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 1100;
+      animation: fadeIn 1s ease-in-out, gradientAnimation 5s ease infinite;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Stilurile existente pentru pagina de finalizare */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: url('Apple-iPhone-15-Pro-lineup-Action-button-230912.jpg.large_2x.jpg') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+    }
+    .container {
+      max-width: 800px;
+      margin: 80px auto;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      background: #fff;
+      color: #000;
+      margin-bottom: 5px;
+      border-radius: 4px;
+    }
+    form div {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+    button {
+      padding: 10px;
+      background: #c06a07ad;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ce0505e8;
+    }
+    #card-details {
+      margin-top: 10px;
+      display: none;
+    }
+    /* Footer fixat jos */
+    .site-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 16px;
+      color: #f0f0f0;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      z-index: 1100;
+    }
+    #order-confirmation {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 20px;
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Antetul site-ului, fixat în partea stângă sus -->
+  <div class="site-header">DLE Marketplace</div>
+  
+  <div class="container">
+    <h1>Finalizare Comandă</h1>
+    
+    <!-- Secțiunea cu produsele din coș -->
+    <section id="order-details">
+      <h2>Produsele din Coș</h2>
+      <ul id="cart-items">
+        <!-- Produsele vor fi adăugate din JavaScript -->
+      </ul>
+    </section>
+    
+    <!-- Secțiunea cu informațiile de livrare și plata -->
+    <section id="delivery-info">
+      <h2>Date de Livrare</h2>
+      <form id="order-form">
+        <div>
+          <label for="fullname">Nume complet:</label>
+          <input type="text" id="fullname" name="fullname" required>
+        </div>
+        <div>
+          <label for="address">Adresă de livrare:</label>
+          <input type="text" id="address" name="address" required>
+        </div>
+        <div>
+          <label for="city">Oraș:</label>
+          <input type="text" id="city" name="city" required>
+        </div>
+        <div>
+          <label for="phone">Telefon:</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div>
+          <h3>Metoda de plată</h3>
+          <input type="radio" id="cash" name="payment" value="cash" checked>
+          <label for="cash" style="display:inline;">Cash</label>
+          <input type="radio" id="card" name="payment" value="card">
+          <label for="card" style="display:inline;">Card</label>
+        </div>
+        <!-- Secțiunea pentru datele cardului, afișată doar dacă se selectează plata cu cardul -->
+        <div id="card-details">
+          <div>
+            <label for="card-number">Număr card:</label>
+            <input type="text" id="card-number" name="card-number">
+          </div>
+          <div>
+            <label for="expiry">Data expirării (MM/YY):</label>
+            <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
+          </div>
+          <div>
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv">
+          </div>
+        </div>
+        <button type="submit" id="submit-order">Finalizare Comandă</button>
+      </form>
+      <!-- Butonul "Acasă" plasat sub butonul de finalizare comandă -->
+      <button onclick="window.location.href='pagina1.html'">Acasă</button>
+    </section>
+    
+    <!-- Mesajul de confirmare, ascuns inițial -->
+    <div id="order-confirmation" style="display:none;">
+      Comanda dumneavoastră a fost înregistrată cu succes și va fi livrată în termen de 2-3 zile lucrătoare.
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="site-footer">
+    DLE Marketplace – Toate drepturile rezervate 2025
+  </footer>
+  
+  <script>
+    // Afișează produsele din coșul de cumpărături (din localStorage)
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsList = document.getElementById('cart-items');
+    if (cart.length === 0) {
+      cartItemsList.innerHTML = '<li>Coșul este gol.</li>';
+    } else {
+      cart.forEach(item => {
+        let li = document.createElement('li');
+        li.textContent = item.name + ' - ' + item.price + ' RON';
+        cartItemsList.appendChild(li);
+      });
+    }
+    
+    // Dezactivează butonul de finalizare comandă dacă coșul este gol
+    const orderForm = document.getElementById('order-form');
+    const submitButton = document.getElementById('submit-order');
+    if (cart.length === 0) {
+      submitButton.disabled = true;
+      submitButton.style.cursor = 'not-allowed';
+      submitButton.textContent = 'Coșul este gol';
+    }
+    
+    // Gestionează afișarea câmpurilor pentru plata cu cardul
+    const cashRadio = document.getElementById('cash');
+    const cardRadio = document.getElementById('card');
+    const cardDetailsDiv = document.getElementById('card-details');
+    
+    function toggleCardDetails() {
+      cardDetailsDiv.style.display = cardRadio.checked ? 'block' : 'none';
+    }
+    
+    cashRadio.addEventListener('change', toggleCardDetails);
+    cardRadio.addEventListener('change', toggleCardDetails);
+    
+    // Gestionează trimiterea formularului de comandă
+    orderForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Preluăm datele formularului
+      const fullname = document.getElementById('fullname').value;
+      const address = document.getElementById('address').value;
+      const city = document.getElementById('city').value;
+      const phone = document.getElementById('phone').value;
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      
+      // Calculăm suma totală din produsele din coș
+      let currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = currentCart.reduce((sum, item) => sum + Number(item.price), 0);
+      
+      // Creăm un obiect comandă
+      const order = {
+        id: '#' + Math.floor(Math.random() * 100000),
+        date: new Date().toISOString().split('T')[0],
+        products: currentCart,
+        amount: total,
+        status: 'Finalizată',
+        customer: {
+          fullname: fullname,
+          address: address,
+          city: city,
+          phone: phone,
+          paymentMethod: paymentMethod
+        }
+      };
+      
+      // Obținem comenzile existente din localStorage și adăugăm noua comandă
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      
+      // Ștergem coșul după finalizarea comenzii
+      localStorage.removeItem('cart');
+      
+      // Ascundem formularul și afișăm mesajul de confirmare
+      orderForm.style.display = 'none';
+      document.getElementById('order-confirmation').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
