@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC-uri - DLE Marketplace</title>
+  <!-- Fonturi futuriste -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Reset și setări de bază */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgb(0, 0, 0));
+      position: relative;
+    }
+    /* Navbar futuristă */
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(32,32,32,0.171), rgba(255,255,255,0.452));
+      padding: 15px 30px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      box-shadow: 0px 4px 10px rgba(187,185,185,0.514);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+    .navbar a {
+      color: #f0f0f0;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+      font-family: 'Orbitron', sans-serif;
+      transition: color 0.3s, transform 0.2s;
+    }
+    .navbar a:hover {
+      color: #000;
+      transform: scale(1.1);
+    }
+    /* Site Header - sub navbar, în stânga */
+    .site-header {
+      position: fixed;
+      top: 70px;
+      left: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(133,132,132,0.678);
+      z-index: 1100;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Secțiunea hero */
+    .hero {
+      width: 100%;
+      height: 100vh;
+      margin-top: 120px;
+      background: url('pcfundal.jpg') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 36px;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    }
+    /* Panou de căutare și filtrare – adaptat pentru PC-uri */
+    .search-filter-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 20px auto;
+      width: 80%;
+    }
+    .search-filter-container input,
+    .search-filter-container select {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #555;
+      border-radius: 5px;
+      flex: 1;
+      background: #333;
+      color: #fff;
+    }
+    .search-filter-container input::placeholder {
+      color: #bbb;
+    }
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 50px 0;
+    }
+    .phone-card {
+      background: #817f7fbb;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgb(255,255,255);
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .phone-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgb(0,0,0);
+    }
+    .phone-card img {
+      width: 300px;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+    .phone-card img:hover {
+      transform: scale(1.05);
+    }
+    .phone-details {
+      flex: 1;
+    }
+    .phone-details h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .phone-details p {
+      font-size: 16px;
+      color: #000;
+      margin-bottom: 10px;
+    }
+    .video-container {
+      margin-top: 15px;
+    }
+    .video-container iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+    }
+    .buy-btn, .details-btn {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 10px;
+    }
+    .buy-btn {
+      background: green;
+      color: white;
+    }
+    .buy-btn:hover {
+      background: darkgreen;
+      transform: scale(1.03);
+    }
+    .details-btn {
+      background: #007bff;
+      color: white;
+      margin-left: 10px;
+    }
+    .details-btn:hover {
+      background: #0056b3;
+      transform: scale(1.03);
+    }
+    /* Buton pentru deschiderea formularului de adăugare anunț */
+    .add-ad {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .add-ad button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      background: rgba(158,158,158,0.562);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .add-ad button:hover {
+      background: rgb(255,0,0);
+      transform: scale(1.05);
+    }
+    /* Formularul de adăugare anunț */
+    .form-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      width: 500px;
+      z-index: 1100;
+    }
+    .form-popup input, .form-popup textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-popup button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: green;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    .form-popup button:hover {
+      background: darkgreen;
+    }
+    .close-btn {
+      background: red;
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .close-btn:hover {
+      background: darkred;
+    }
+    /* Coșul de cumpărături – actualizat pentru noul navbar */
+    .cart {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.479), rgba(255,255,255,0.644));
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(153,152,152,0.548);
+      width: 300px;
+      z-index: 1000;
+    }
+    .cart h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .cart-items {
+      list-style: none;
+      padding: 0;
+    }
+    .cart-items li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-items li button {
+      background: red;
+      border: none;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cart-items li button:hover {
+      background: darkred;
+    }
+    .empty-cart {
+      text-align: center;
+      color: #fff;
+      font-size: 14px;
+    }
+    /* Footer */
+    footer {
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar futuristă -->
+  <div class="navbar">
+    <a href="pagina1.html">Acasă</a>
+    <a href="telefoane.html">Telefoane</a>
+    <a href="tablete.html">Tablete</a>
+    <!-- Am actualizat link-ul pentru categoria PC-uri -->
+    <a href="pc.html">PC-uri</a>
+    <a href="laptopuri.html">Laptopuri</a>
+  </div>
+  
+  <!-- Site Header sub navbar, în stânga -->
+  <div class="site-header">DLE-MarketPlace</div>
+  
+  <!-- Secțiunea hero -->
+  <div class="hero">PC-uri - DLE Marketplace</div>
+  
+  <!-- Panou de căutare și filtrare -->
+  <div class="search-filter-container">
+    <input type="text" id="search-input" placeholder="Caută produse...">
+    <select id="brand-filter">
+      <option value="all">Toate brandurile</option>
+      <option value="apple">Apple</option>
+      <option value="asus">Asus</option>
+      <option value="razer">Razer</option>
+      <option value="lenovo">Lenovo</option>
+    </select>
+  </div>
+  
+  <!-- Container pentru anunțuri -->
+  <div class="container" id="ads-container">
+    <!-- Anunț 1 - iMAC -->
+    <div class="phone-card" data-brand="apple">
+      <img src="imac1.jpg" alt="iMAC">
+      <div class="phone-details">
+        <h2>iMAC</h2>
+        <p><strong>Preț:</strong> 5000 RON</p>
+        <p><strong>Specificații:</strong> Ecran Retina 4.5K, procesor Apple M1, 8GB RAM, 256GB SSD</p>
+        <p><strong>Descriere:</strong> iMAC oferă performanțe excelente și un design elegant, ideal pentru creativitate și productivitate.</p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/cXnihGlYcPQ" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="buy-btn" onclick="addToCart('iMAC', 5000)">Cumpără</button>
+        <button class="details-btn" onclick="location.href='detalii_imac.html'">Detalii</button>
+      </div>
+    </div>
+    
+    <!-- Anunț 2 - Asus ROG Strix -->
+    <div class="phone-card" data-brand="asus">
+      <img src="rogstrix1.jpg" alt="Asus ROG Strix">
+      <div class="phone-details">
+        <h2>Asus ROG Strix</h2>
+        <p><strong>Preț:</strong> 7000 RON</p>
+        <p><strong>Specificații:</strong> Procesor Intel Core i7, placă grafică NVIDIA, 16GB RAM, 512GB SSD, ecran 144Hz</p>
+        <p><strong>Descriere:</strong> Asus ROG Strix este proiectat pentru performanță maximă în gaming și multitasking intensiv.</p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/KgaRN2jRyAw" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="buy-btn" onclick="addToCart('Asus ROG Strix', 7000)">Cumpără</button>
+        <button class="details-btn" onclick="location.href='detalii_asusrogstrix.html'">Detalii</button>
+      </div>
+    </div>
+    
+    <!-- Anunț 3 - Razer Diaxxcs -->
+    <div class="phone-card" data-brand="razer">
+      <img src="razerdiaxa1.jpg"Razer Diaxxcs">
+      <div class="phone-details">
+        <h2>Razer Diaxxcs</h2>
+        <p><strong>Preț:</strong> 8000 RON</p>
+        <p><strong>Specificații:</strong> Procesor puternic, placă grafică de ultimă generație, sistem de răcire avansat</p>
+        <p><strong>Descriere:</strong> Razer Diaxxcs oferă performanțe de top și un design inovator pentru gaming intensiv.</p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/62yMv-uyTaI" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="buy-btn" onclick="addToCart('Razer Diaxxcs', 8000)">Cumpără</button>
+        <button class="details-btn" onclick="location.href='detalii_razerdiaxxcs.html'">Detalii</button>
+      </div>
+    </div>
+    
+    <!-- Anunț 4 - Lenovo Legion T5 -->
+    <div class="phone-card" data-brand="lenovo">
+      <img src="lenovot1.jpg" alt="Lenovo Legion T5">
+      <div class="phone-details">
+        <h2>Lenovo Legion T5</h2>
+        <p><strong>Preț:</strong> 6000 RON</p>
+        <p><strong>Specificații:</strong> Procesor AMD Ryzen, placă grafică NVIDIA, 16GB RAM, 512GB SSD</p>
+        <p><strong>Descriere:</strong> Lenovo Legion T5 combină performanța cu fiabilitatea, fiind ideal pentru gaming și muncă creativă.</p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/8BVsG5Qiaa4" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="buy-btn" onclick="addToCart('Lenovo Legion T5', 6000)">Cumpără</button>
+        <button class="details-btn" onclick="location.href='detalii_lenovolegiont5.html'">Detalii</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Buton pentru deschiderea formularului de adăugare anunț -->
+  <div class="add-ad">
+    <button onclick="showForm()">Adaugă un anunț</button>
+  </div>
+  
+  <!-- Coșul de cumpărături -->
+  <div class="cart">
+    <h3>Coș de cumpărături</h3>
+    <ul id="cart-items" class="cart-items"></ul>
+    <p id="empty-cart" class="empty-cart">Coșul este gol.</p>
+  </div>
+  
+  <!-- Formular de adăugare anunț -->
+  <div id="form-popup" class="form-popup">
+    <h2>Adaugă un anunț</h2>
+    <input type="text" id="phone-name" placeholder="Numele PC-ului" required>
+    <input type="number" id="phone-price" placeholder="Preț (RON)" required>
+    <textarea id="phone-specs" placeholder="Specificații" required></textarea>
+    <textarea id="phone-description" placeholder="Descriere" required></textarea>
+    <input type="url" id="phone-image" placeholder="URL imagine" required>
+    <input type="url" id="phone-video" placeholder="URL video YouTube">
+    <button onclick="addAd()">Postează Anunț</button>
+    <button class="close-btn" onclick="closeForm()">Închide</button>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 DLE Marketplace. Toate drepturile rezervate</p>
+  </footer>
+  
+  <script>
+    // Inițializarea coșului din localStorage sau setarea ca array gol
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCart();
+    
+    // Evenimente pentru filtrare
+    document.getElementById('search-input').addEventListener('input', filterAds);
+    document.getElementById('brand-filter').addEventListener('change', filterAds);
+    
+    // Funcții pentru deschiderea și închiderea formularului de adăugare anunț
+    function showForm() {
+      document.getElementById('form-popup').style.display = 'block';
+    }
+    function closeForm() {
+      document.getElementById('form-popup').style.display = 'none';
+    }
+    
+    function addAd() {
+      const name = document.getElementById('phone-name').value;
+      const price = document.getElementById('phone-price').value;
+      const specs = document.getElementById('phone-specs').value;
+      const description = document.getElementById('phone-description').value;
+      const image = document.getElementById('phone-image').value;
+      const video = document.getElementById('phone-video').value;
+  
+      if (!name || !price || !specs || !description || !image) {
+        alert("Toate câmpurile sunt obligatorii, cu excepția link-ului video.");
+        return;
+      }
+  
+      const adContainer = document.getElementById('ads-container');
+      const newAd = document.createElement('div');
+      newAd.classList.add('phone-card');
+  
+      // Determinarea brandului pe baza numelui (adaptată pentru PC-uri)
+      let lowerName = name.toLowerCase();
+      let brand = "unknown";
+      if (lowerName.includes("imac") || lowerName.includes("apple")) {
+        brand = "apple";
+      } else if (lowerName.includes("asus")) {
+        brand = "asus";
+      } else if (lowerName.includes("razer")) {
+        brand = "razer";
+      } else if (lowerName.includes("lenovo")) {
+        brand = "lenovo";
+      }
+      newAd.setAttribute('data-brand', brand);
+  
+      // Creare link pentru pagina de detalii (se generează automat din nume)
+      let detailsPage = 'detalii_' + name.replace(/\s+/g, '').toLowerCase() + '.html';
+  
+      newAd.innerHTML = `
+        <img src="${image}" alt="${name}">
+        <div class="phone-details">
+          <h2>${name}</h2>
+          <p><strong>Preț:</strong> ${price} RON</p>
+          <p><strong>Specificații:</strong> ${specs}</p>
+          <p><strong>Descriere:</strong> ${description}</p>
+          ${video ? `<div class="video-container">
+              <iframe src="${video}" frameborder="0" allowfullscreen></iframe>
+            </div>` : ''}
+          <button class="buy-btn" onclick="addToCart('${name}', ${price})">Cumpără</button>
+          <button class="details-btn" onclick="location.href='${detailsPage}'">Detalii</button>
+        </div>
+      `;
+  
+      adContainer.appendChild(newAd);
+      filterAds();
+  
+      document.getElementById('phone-name').value = "";
+      document.getElementById('phone-price').value = "";
+      document.getElementById('phone-specs').value = "";
+      document.getElementById('phone-description').value = "";
+      document.getElementById('phone-image').value = "";
+      document.getElementById('phone-video').value = "";
+      closeForm();
+    }
+    
+    // Funcția pentru adăugarea unui produs în coș
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+    
+    // Funcția pentru eliminarea unui produs din coș
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+    
+    // Funcția de actualizare a coșului (afișare și salvare în localStorage)
+    function updateCart() {
+      const cartItems = document.getElementById('cart-items');
+      const emptyCart = document.getElementById('empty-cart');
+      cartItems.innerHTML = '';
+  
+      if (cart.length === 0) {
+        emptyCart.style.display = 'block';
+      } else {
+        emptyCart.style.display = 'none';
+        cart.forEach((item, index) => {
+          const li = document.createElement('li');
+          li.innerHTML = `${item.name} - ${item.price} RON <button onclick="removeFromCart(${index})">X</button>`;
+          cartItems.appendChild(li);
+        });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    
+    // Funcția de filtrare a anunțurilor
+    function filterAds() {
+      let searchTerm = document.getElementById('search-input').value.toLowerCase();
+      let brandFilter = document.getElementById('brand-filter').value;
+      let ads = document.querySelectorAll('.phone-card');
+      ads.forEach((ad) => {
+        let title = ad.querySelector('.phone-details h2').textContent.toLowerCase();
+        let adBrand = ad.getAttribute('data-brand');
+        let matchesSearch = title.includes(searchTerm);
+        let matchesBrand = (brandFilter === 'all' || adBrand === brandFilter);
+        ad.style.display = (matchesSearch && matchesBrand) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

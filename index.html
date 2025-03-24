@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace Electronice</title>
+  <!-- Importul fontului Orbitron -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset și stiluri generale */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: url('Apple-iPhone-15-Pro-lineup-Action-button-230912.jpg.large_2x.jpg') no-repeat center center/cover;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    
+    /* Antetul site-ului cu gradient de la alb la gri */
+    .site-header {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      background: linear-gradient(45deg, #000000, #ffffff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      z-index: 1100;
+      animation: fadeIn 1s ease-in-out, gradientAnimation 5s ease infinite;
+    }
+    
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Containerul principal: stânga pentru mesajul de bun venit, dreapta pentru autentificare */
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 80%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .welcome {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    
+    /* Containerul din partea dreaptă pentru funcțiile de autentificare */
+    .right-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .start-btn, .register, .login {
+      padding: 15px 30px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: rgba(153, 148, 148, 0.774);
+      color: rgb(0, 0, 0);
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+      margin-bottom: 10px;
+    }
+    
+    .start-btn:hover, .register:hover, .login:hover {
+      transform: scale(1.1);
+    }
+    
+    .auth-options {
+      display: none;
+      flex-direction: row;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .form {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(135deg, #000000 0%, #ffffff 100%);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 5px 15px rgba(136, 134, 134, 0.3);
+      width: 300px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      margin-top: 20px;
+    }
+    
+    .form input {
+      padding: 10px;
+      font-size: 14px;
+      width: 100%;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    
+    .form input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.795);
+    }
+    
+    .form button {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      background-color: #000205;
+      color: white;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+    
+    .form button:hover {
+      background-color: #5e5b5b;
+    }
+    
+    .checkmark {
+      font-size: 50px;
+      color: rgb(255, 255, 255);
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .arrow {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+    
+    .arrow:hover {
+      transform: translateX(5px);
+    }
+    
+    /* Container pentru icoanele social media */
+    .social-icons {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 15px;
+      z-index: 1100;
+    }
+    
+    /* Stilizare îmbunătățită pentru icoanele social media */
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px;
+      transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .social-icon:hover {
+      transform: scale(1.15);
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <!-- Antetul site-ului -->
+  <div class="site-header">DLE-MarketPlace</div>
+  
+  <!-- Containerul principal -->
+  <div class="main-content">
+    <!-- Partea stângă: mesajul de bun venit -->
+    <div class="left-side">
+      <div class="welcome" id="welcome-text">Bine ai venit !!!</div>
+    </div>
+    <!-- Partea dreaptă: butonul Start și funcțiile de autentificare -->
+    <div class="right-side">
+      <div id="auth-container">
+        <!-- Butonul Start -->
+        <button class="start-btn" id="start-btn" onclick="showAuthOptions()">Start</button>
+        <!-- Butoanele pentru Register și Log in -->
+        <div id="auth-options" class="auth-options">
+          <button class="register" onclick="showForm('register-form')">Register</button>
+          <button class="login" onclick="showForm('login-form')">Log in</button>
+        </div>
+        <!-- Formularul de înregistrare -->
+        <div id="register-form" class="form">
+          <input type="text" id="reg-name" placeholder="Nume" required>
+          <input type="text" id="reg-surname" placeholder="Prenume" required>
+          <input type="text" id="reg-phone" placeholder="Număr de telefon" required>
+          <input type="email" id="reg-email" placeholder="Email" required>
+          <input type="password" id="reg-password" placeholder="Parolă" required>
+          <button type="submit" onclick="registerUser()">Înregistrează-te</button>
+        </div>
+        <!-- Formularul de log in -->
+        <div id="login-form" class="form">
+          <input type="email" id="login-email" placeholder="Email" required>
+          <input type="password" id="login-password" placeholder="Parolă" required>
+          <button type="submit" onclick="loginUser()">Log in</button>
+        </div>
+        <!-- Checkmark pentru confirmare -->
+        <div id="checkmark" class="checkmark">✔</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="arrow" onclick="goToPage1()">➡</div>
+  
+  <!-- Containerul pentru icoanele social media -->
+  <div class="social-icons">
+    <a href="https://www.instagram.com/profilul_tau" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="social-icon">
+    </a>
+    <a href="https://www.facebook.com/profilul_tau" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="social-icon">
+    </a>
+    <a href="https://www.youtube.com/channel/profilul_tau" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" class="social-icon">
+    </a>
+    <a href="https://www.tiktok.com/@profilul_tau" target="_blank">
+      <img src="tiktok-logo.jpg" alt="TikTok" class="social-icon">
+    </a>
+  </div>
+  
+  <script>
+    function showAuthOptions() {
+      // Ascundem butonul Start și afișăm opțiunile de autentificare
+      document.getElementById('start-btn').style.display = 'none';
+      document.getElementById('auth-options').style.display = 'flex';
+    }
+    
+    function showForm(formId) {
+      // Ascundem opțiunile de autentificare și orice formular deja afișat
+      document.getElementById('auth-options').style.display = 'none';
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'none';
+      // Afișăm formularul selectat
+      document.getElementById(formId).style.display = 'flex';
+    }
+    
+    function registerUser() {
+      const user = {
+        name: document.getElementById('reg-name').value,
+        surname: document.getElementById('reg-surname').value,
+        phone: document.getElementById('reg-phone').value,
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value
+      };
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('loggedIn', 'true');
+      // După înregistrare, ștergem conținutul containerului de autentificare
+      document.getElementById('auth-container').innerHTML = '<div id="checkmark" class="checkmark" style="display:block;">✔</div>';
+    }
+    
+    function loginUser() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      if (currentUser && currentUser.email === email && currentUser.password === password) {
+        localStorage.setItem('loggedIn', 'true');
+        document.getElementById('auth-container').innerHTML = '<div id="checkmark" class="checkmark" style="display:block;">✔</div>';
+      } else {
+        alert('Email sau parolă incorecte!');
+      }
+    }
+    
+    function goToPage1() {
+      window.location.href = 'pagina1.html';
+    }
+  </script>
+</body>
+</html>

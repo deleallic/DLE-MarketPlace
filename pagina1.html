@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produse - DLE Marketplace</title>
+  <!-- Fonturi futuriste -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Reset și setări de bază */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: url('Apple-iPhone-15-Pro-lineup-Action-button-230912.jpg.large_2x.jpg') no-repeat center center/cover;
+      font-family: 'Roboto', sans-serif;
+      min-height: 100vh;
+      color: #f0f0f0;
+      position: relative;
+    }
+    /* Navbar futuristă */
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(24, 23, 23, 0.685), rgba(255, 255, 255, 0.452));
+      padding: 15px 30px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      box-shadow: 0px 4px 10px rgba(187, 185, 185, 0.514);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+    .navbar a {
+      color: #f0f0f0;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+      font-family: 'Orbitron', sans-serif;
+      transition: color 0.3s, transform 0.2s;
+    }
+    .navbar a:hover {
+      color: #000000;
+      transform: scale(1.1);
+    }
+    /* Coș de cumpărături modern */
+    .cart {
+      position: fixed;
+      top: 70px; /* sub navbar */
+      right: 20px;
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgba(255, 255, 255, 0.719));
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(187, 185, 185, 0.514);
+      max-width: 300px;
+      z-index: 1000;
+    }
+    .cart h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    .cart-items {
+      list-style: none;
+      padding: 0;
+    }
+    .cart-items li {
+      margin-bottom: 10px;
+      padding: 8px;
+      background: rgb(0, 0, 0);
+      border-radius: 5px;
+    }
+    .empty-cart {
+      font-size: 18px;
+      text-align: center;
+      color: #ccc;
+    }
+    /* Buton Finalizare Comandă */
+    .finalize-order-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #ffffffe8;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .finalize-order-btn:hover {
+      background-color: #ff0000;
+    }
+    /* Popup-uri cu gradient discrete */
+    .popup {
+      display: none;
+      position: fixed;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 30px rgb(0, 0, 0);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      z-index: 1100;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .popup.show {
+      opacity: 1;
+    }
+    /* Popup Produse (stânga) */
+    .popup.products {
+      left: 3%;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgba(255, 255, 255, 0.438));
+      border-left: 5px solid #ffffff;
+    }
+    .popup.products.show {
+      transform: translateY(-50%) scale(1);
+    }
+    /* Popup Contact (dreapta) */
+    .popup.contact {
+      right: 3%;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgba(255, 255, 255, 0.534));
+    }
+    .popup.contact.show {
+      transform: translateY(-50%) scale(1);
+    }
+    /* Popup Retur (centrat) */
+    .popup.return {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgba(255, 255, 255, 0.637));
+    }
+    .popup.return.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .popup h2 {
+      text-align: center;
+      font-size: 26px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #f0f0f0;
+    }
+    /* Liste în popup Produse */
+    .popup ul {
+      list-style: none;
+      padding: 0;
+    }
+    .popup ul li {
+      padding: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 8px 0;
+      border-radius: 8px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .popup ul li:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+    /* Butoane de închidere */
+    .close-btn {
+      background: #0000009f;
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+      font-size: 18px;
+      transition: background 0.3s ease;
+    }
+    .close-btn:hover {
+      background: #cc0033;
+    }
+    /* Formularul de retur */
+    .return-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .return-form input,
+    .return-form textarea {
+      padding: 12px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+    .return-form input::placeholder,
+    .return-form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .return-form button {
+      background: #c06a07ad;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      color: #000000;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .return-form button:hover {
+      background: #ce0505e8;
+    }
+    /* Stilizare pentru butonul Info din formularul de retur */
+    .return-info {
+      background: #c06a07ad;
+      border: none;
+      padding: 12px;
+      margin-left: 10px;
+      font-size: 18px;
+      color: #000;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .return-info:hover {
+      background: #ce0505e8;
+    }
+    /* Carusel pentru Branduri */
+    .brand-carousel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 220px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(206, 204, 204, 0.541);
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgb(255, 255, 255));
+      z-index: 1200;
+    }
+    .carousel-track {
+      display: flex;
+      animation: scrollBrands 15s linear infinite;
+    }
+    .carousel-track img {
+      width: 80px;
+      margin: 10px;
+      filter: grayscale(100%);
+      transition: filter 0.3s;
+    }
+    .carousel-track img:hover {
+      filter: grayscale(0%);
+    }
+    @keyframes scrollBrands {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .navbar a {
+        font-size: 16px;
+      }
+      .cart {
+        top: 60px;
+        right: 10px;
+        max-width: 250px;
+      }
+      .brand-carousel {
+        width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="index.html">Acasă</a>
+    <a href="#" onclick="showPopup()">Produse</a>
+    <a href="#" onclick="showContactPopup()">Contact</a>
+    <a href="#" onclick="showReturnPopup()">Retur</a>
+    <a href="info.html">Info</a>
+    <a href="cont.html">Cont</a>
+  </div>
+  
+  <!-- Coș de cumpărături -->
+  <div class="cart">
+    <h3>Coș de cumpărături</h3>
+    <ul id="cart-items" class="cart-items"></ul>
+    <p id="empty-cart" class="empty-cart">Coșul este gol.</p>
+    <!-- Butonul de finalizare comandă -->
+    <button id="finalize-order" class="finalize-order-btn" onclick="window.location.href='finalizare.html'">Finalizare Comandă</button>
+  </div>
+  
+  <!-- Popup pentru Produse (Stânga) -->
+  <div id="popup" class="popup products">
+    <h2>Selectează o categorie</h2>
+    <ul>
+      <li onclick="goToPage('telefoane.html')">📱 Telefoane</li>
+      <li onclick="goToPage('tablete.html')">📟 Tablete</li>
+      <li onclick="goToPage('casti.html')">🎧 Căști</li>
+      <li onclick="goToPage('pc.html')">🖥 PC</li>
+      <li onclick="goToPage('laptopuri.html')">💻 Laptopuri</li>
+    </ul>
+    <button class="close-btn" onclick="hidePopup()">Închide</button>
+  </div>
+  
+  <!-- Popup pentru Contact (Dreapta) -->
+  <div id="contact-popup" class="popup contact">
+    <h2>Informații de Contact</h2>
+    <p><strong>Numele firmei:</strong> DLE Marketplace</p>
+    <p><strong>Administrator:</strong> Delea Alin</p>
+    <p><strong>Telefon administrator:</strong> +40 722687716</p>
+    <p><strong>Sediu:</strong> Str.Padina , Nr 14 , Ploiesti/p>
+    <p><strong>Suport clienți:</strong> suport@dlemarketplace.ro</p>
+    <button class="close-btn" onclick="hideContactPopup()">Închide</button>
+  </div>
+  
+  <!-- Popup pentru Retur (Centrat) -->
+  <div id="return-popup" class="popup return">
+    <h2>Politica de Retur</h2>
+    <p>Puteți returna produsele în termen de 14 zile de la primire, cu condiția ca acestea să fie în stare perfectă și să aibă ambalajul original.</p>
+    <p>Returnarea banilor se va face în maxim 7 zile lucrătoare de la primirea produsului returnat.</p>
+    <h3>Formular de Returnare</h3>
+    <form class="return-form">
+      <input type="text" placeholder="Nume complet" required>
+      <input type="email" placeholder="Email" required>
+      <input type="text" placeholder="Număr comandă" required>
+      <textarea placeholder="Motivul returului" rows="4" required></textarea>
+      <button type="submit">Trimite Cererea</button>
+      <button type="button" class="return-info" onclick="window.location.href='inforetur.html'">Info</button>
+    </form>
+    <button class="close-btn" onclick="hideReturnPopup()">Închide</button>
+  </div>
+  
+  <!-- Carusel pentru Branduri -->
+  <div class="brand-carousel">
+    <div class="carousel-track">
+      <img src="logoapple.jpg" alt="Apple">
+      <img src="logosamsuung.jpg" alt="Samsung">
+      <img src="logoasus.jpg" alt="Asus">
+      <img src="logohuawei.jpg" alt="Huawei">
+      <img src="google.jpg" alt="Samsung">
+      <!-- Pentru a crea un efect de scroll continuu, se pot repeta imaginile -->
+      <img src="logoapple.jpg" alt="Apple">
+      <img src="logosamsuung.jpg" alt="Samsung">
+      <img src="logoasus.jpg" alt="Asus">
+      <img src="logohuawei.jpg" alt="Huawei">
+      <img src="google.jpg" alt="Samsung">
+    </div>
+  </div>
+  
+  <script>
+    // Funcții pentru afișarea/ascunderea popup-urilor
+    function showPopup() {
+      const prodPopup = document.getElementById('popup');
+      prodPopup.style.display = 'block';
+      setTimeout(() => prodPopup.classList.add('show'), 10);
+    }
+    function hidePopup() {
+      const prodPopup = document.getElementById('popup');
+      prodPopup.classList.remove('show');
+      setTimeout(() => prodPopup.style.display = 'none', 400);
+    }
+    function showContactPopup() {
+      const contactPopup = document.getElementById('contact-popup');
+      contactPopup.style.display = 'block';
+      setTimeout(() => contactPopup.classList.add('show'), 10);
+    }
+    function hideContactPopup() {
+      const contactPopup = document.getElementById('contact-popup');
+      contactPopup.classList.remove('show');
+      setTimeout(() => contactPopup.style.display = 'none', 400);
+    }
+    function showReturnPopup() {
+      const returnPopup = document.getElementById('return-popup');
+      returnPopup.style.display = 'block';
+      setTimeout(() => returnPopup.classList.add('show'), 10);
+    }
+    function hideReturnPopup() {
+      const returnPopup = document.getElementById('return-popup');
+      returnPopup.classList.remove('show');
+      setTimeout(() => returnPopup.style.display = 'none', 400);
+    }
+    function goToPage(page) {
+      window.location.href = page;
+    }
+  
+    // FUNCȚIA DE SINCRONIZARE A COSULUI DE CUMPARATURI
+    // Inițializare coș din localStorage sau ca array gol
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCart();
+  
+    // Funcția de actualizare a coșului (afișare și salvare în localStorage)
+    function updateCart() {
+      const cartItems = document.getElementById('cart-items');
+      const emptyCart = document.getElementById('empty-cart');
+      cartItems.innerHTML = '';
+  
+      if (cart.length === 0) {
+        emptyCart.style.display = 'block';
+      } else {
+        emptyCart.style.display = 'none';
+        cart.forEach((item, index) => {
+          const li = document.createElement('li');
+          li.innerHTML = `${item.name} - ${item.price} RON <button onclick="removeFromCart(${index})">X</button>`;
+          cartItems.appendChild(li);
+        });
+      }
+      // Salvăm coșul actualizat în localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  
+    // Funcția pentru adăugarea unui produs în coș
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+    
+    // Funcția pentru eliminarea unui produs din coș
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+    
+    // Sincronizarea între pagini: ascultăm evenimentul "storage"
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'cart') {
+        cart = JSON.parse(e.newValue) || [];
+        updateCart();
+      }
+    });
+  </script>
+</body>
+</html>
